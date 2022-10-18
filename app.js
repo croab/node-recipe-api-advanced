@@ -1,8 +1,25 @@
+// Imports
 const express = require('express');
 const morgan = require('morgan');
+const recipeRouter = require('./routes/recipeRoutes');
 
-// TODO - I need to import routers here
-
+// Instantiate app
 const app = express();
+
+// Implement middlewares
+app.use(express.json());
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('tiny'));
+}
+
+// Mount routes
+app.use('/api/v1/recipes', recipeRouter);
+
+// TODO - I need to add error handling here
+app.use('*', (req, res, next) => {
+  res.status(404).json({
+    status: 'fail'
+  })
+});
 
 module.exports = app;
