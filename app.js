@@ -1,10 +1,8 @@
-// const morgan = require('morgan');
+const express = require('express');
+const morgan = require('morgan');
 
+// TODO - I need to import routers here
 
-// Parse incoming data and add to req
-// app.use(express.json());
+const app = express();
 
-// Set morgan to be used if in development
-// if (process.env.NODE_ENV === 'development') {
-//   app.use(morgan('dev'));
-// }
+module.exports = app;
