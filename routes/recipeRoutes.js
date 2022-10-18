@@ -5,10 +5,13 @@ const router = express.Router();
 
 router
   .route('/')
-  .get(recipeController.getAllRecipes);
-  // .get((req, res, next) => res.status(200).json({status: 'success'}));
+  .get(recipeController.getAllRecipes)
+  .post(recipeController.createRecipe);
 
-// router
-//   .route('/recipes/:id');
+router
+  .route('/:id')
+  .get(recipeController.getRecipe)
+  .patch(recipeController.updateRecipe)
+  .delete(recipeController.deleteRecipe);
 
 module.exports = router;
