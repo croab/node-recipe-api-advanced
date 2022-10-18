@@ -1,6 +1,7 @@
 // Imports
 const express = require('express');
 const morgan = require('morgan');
+const mongoose = require('mongoose');
 
 const app = express();
 
@@ -11,7 +12,12 @@ if (process.env.NODE_ENV === 'development') {
 // Parse incoming data and add to req
 app.use(express.json());
 
-// Need to connect to MongoDB
+// Connect MongoDB
+const password = process.env.PASSWORD;
+const db = process.env.DATABASE.replace('<PASSWORD>', password);
+mongoose.connect(db).then(() => {
+  console.log('Successfully connected to database...')
+});
 
 // Creating server
 const port = process.env.NODE_ENV || 3000;
