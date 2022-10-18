@@ -5,7 +5,9 @@ exports.getAllRecipes = async (req, res) => {
   try {
     const queryConstruct = new ControllerHelper(Recipe, req.query)
                             .filter()
-                            .sort();
+                            .sort()
+                            .limitFields()
+                            .paginate();
     // The query construct will be returned by each method and be available in .query
     const recipes = await queryConstruct.query;
     res.status(200).json({

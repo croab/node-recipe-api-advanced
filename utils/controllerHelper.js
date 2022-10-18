@@ -30,13 +30,23 @@ class ControllerHelper {
     return this;
   }
 
-  // limitResults() {
+  limitFields() {
+    if (this.queryString.limit) {
+      const limitFormatted = this.queryString.limit.split(',').join(' ');
+      this.query = this.query.select(limitFormatted);
+    } else {
+      this.query = this.query.select('-__v');
+    }
+    return this;
+  }
 
-  // }
-
-  // paginate() {
-
-  // }
+  paginate() {
+    const page = parseInt(this.queryString.page, 10) || 1;
+    const limit = parseInt(this.queryString.limit, 10) || 100;
+    const skipNumber = (page - 1) * limit;
+    this.query = this.query.skip(skipNumber).limit(limit);
+    return this;
+  }
 }
 
 module.exports = ControllerHelper;
