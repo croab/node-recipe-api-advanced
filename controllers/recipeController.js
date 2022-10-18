@@ -3,10 +3,11 @@ const ControllerHelper = require('./../utils/controllerHelper');
 
 exports.getAllRecipes = async (req, res) => {
   try {
-    const queryConstruct = new ControllerHelper(Recipe, req.query).filter();
+    const queryConstruct = new ControllerHelper(Recipe, req.query)
+                            .filter()
+                            .sort();
     // The query construct will be returned by each method and be available in .query
-    // const recipes = await queryConstruct.query;
-    const recipes = await Recipe.find();
+    const recipes = await queryConstruct.query;
     res.status(200).json({
       status: 'success',
       results: recipes.length,

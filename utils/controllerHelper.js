@@ -20,9 +20,15 @@ class ControllerHelper {
     return this;
   }
 
-  // sort() {
-
-  // }
+  sort() {
+    if (this.queryString.sort) {
+      const sortFormatted = this.queryString.sort.split(',').join(' ');
+      this.query = this.query.sort(sortFormatted);
+    } else {
+      this.query = this.query.sort('title');
+    }
+    return this;
+  }
 
   // limitResults() {
 
