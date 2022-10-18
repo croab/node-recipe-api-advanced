@@ -1,22 +1,19 @@
 // Imports
 const express = require('express');
-const morgan = require('morgan');
+const dotenv = require('dotenv');
+dotenv.config({ path: './config.env' });
 const mongoose = require('mongoose');
 
 const app = express();
 
-// Set morgan to be used if in development
-if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
-}
 // Parse incoming data and add to req
 app.use(express.json());
 
 // Connect MongoDB
-const password = process.env.PASSWORD;
+const password = process.env.DATABASE_PASSWORD;
 const db = process.env.DATABASE.replace('<PASSWORD>', password);
 mongoose.connect(db).then(() => {
-  console.log('Successfully connected to database...')
+  console.log('Successfully connected to database...');
 });
 
 // Creating server
