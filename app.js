@@ -15,7 +15,7 @@ if (process.env.NODE_ENV === 'development') {
 // Mount routes
 app.use('/api/v1/recipes', recipeRouter);
 
-// TODO - I need to add error handling here
+// If above routes are not found trigger the below
 app.use('*', (req, res, next) => {
   res.status(404).json({
     status: 'fail'
