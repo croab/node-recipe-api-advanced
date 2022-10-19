@@ -1,6 +1,8 @@
 // Imports
 const express = require('express');
 const morgan = require('morgan');
+
+const CustomError = require('./utils/customError');
 const recipeRouter = require('./routes/recipeRoutes');
 
 // Instantiate app
@@ -17,9 +19,13 @@ app.use('/api/v1/recipes', recipeRouter);
 
 // If above routes are not found trigger the below
 app.use('*', (req, res, next) => {
-  res.status(404).json({
-    status: 'fail'
-  })
+  next(new CustomError(
+    `Cannot find ${req.originalUrl} on this server.`,
+    404
+  ));
 });
+
+// Then handle all errors if any arise - TODO
+// app.use(globalErrorHandler);
 
 module.exports = app;
