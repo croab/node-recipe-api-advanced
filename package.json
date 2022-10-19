@@ -5,13 +5,15 @@
   "main": "index.js",
   "scripts": {
     "start": "DEBUG=express:* nodemon server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "seed": "node ./db/seeds.js"
   },
   "author": "Benjamin Croad",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "mongodb": "^4.10.0",
     "mongoose": "^6.6.5",
     "morgan": "^1.10.0"
   }

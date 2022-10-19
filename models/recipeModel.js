@@ -1,18 +1,22 @@
 const mongoose = require('mongoose');
 
-// const ingredientSchema = new mongoose.Schema(
-//   {
-//     ingredientName: {
-//       type: String,
-//       required: [true, 'An ingredient must have a name.'],
-//       trim: true
-//     },
-//     quantity: {
-//       type: String,
-//       required: [true, 'An ingredient must have a quantity.']
-//     }
-//   }
-// );
+const ingredientSchema = new mongoose.Schema(
+  {
+    ingredientName: {
+      type: String,
+      required: [true, 'An ingredient must have a name.'],
+      trim: true
+    },
+    quantityValue: {
+      type: Number,
+      required: [true, 'An ingredient must have a quantity.']
+    },
+    quantityUnit: {
+      type: String,
+      required: [true, 'An quantity must have a unit.']
+    }
+  }
+);
 
 const recipeSchema = new mongoose.Schema(
   {
@@ -21,10 +25,10 @@ const recipeSchema = new mongoose.Schema(
       required: [true, 'A recipe title is required.'],
       trim: true
     },
-    ingredients: {
-      type: String
-    },
-    // ingredients: [ingredientSchema],
+    // ingredients: {
+    //   type: String
+    // },
+    ingredients: [ingredientSchema],
     // ingredients: {
     //   type: Array,
     //   required: [true, 'A recipe must have ingredients.']
