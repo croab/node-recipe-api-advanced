@@ -25,14 +25,7 @@ const recipeSchema = new mongoose.Schema(
       required: [true, 'A recipe title is required.'],
       trim: true
     },
-    // ingredients: {
-    //   type: String
-    // },
     ingredients: [ingredientSchema],
-    // ingredients: {
-    //   type: Array,
-    //   required: [true, 'A recipe must have ingredients.']
-    // },
     preparationTime: {
       type: Number,
       required: [true, 'A recipe must have a prep time.']
