@@ -1,6 +1,10 @@
 // Imports
 const express = require('express');
 const morgan = require('morgan');
+
+const CustomError = require('./utils/customError');
+const globalErrorHandler = require('./controllers/errorController');
+
 const recipeRouter = require('./routes/recipeRoutes');
 
 // Instantiate app
@@ -15,11 +19,15 @@ if (process.env.NODE_ENV === 'development') {
 // Mount routes
 app.use('/api/v1/recipes', recipeRouter);
 
-// TODO - I need to add error handling here
+// If above routes are not found trigger the below
 app.use('*', (req, res, next) => {
-  res.status(404).json({
-    status: 'fail'
-  })
+  next(new CustomError(
+    `Cannot find ${req.originalUrl} on this server.`,
+    404
+  ));
 });
+
+// Then handle all errors if any arise - TODO
+app.use(globalErrorHandler);
 
 module.exports = app;
