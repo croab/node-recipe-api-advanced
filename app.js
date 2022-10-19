@@ -3,6 +3,8 @@ const express = require('express');
 const morgan = require('morgan');
 
 const CustomError = require('./utils/customError');
+const globalErrorHandler = require('./controllers/errorController');
+
 const recipeRouter = require('./routes/recipeRoutes');
 
 // Instantiate app
@@ -26,6 +28,6 @@ app.use('*', (req, res, next) => {
 });
 
 // Then handle all errors if any arise - TODO
-// app.use(globalErrorHandler);
+app.use(globalErrorHandler);
 
 module.exports = app;
