@@ -1,6 +1,7 @@
 const { update } = require('./../models/recipeModel');
 const Recipe = require('./../models/recipeModel');
 const ControllerHelper = require('./../utils/controllerHelper');
+const CustomError = require('./../utils/customError');
 
 const catchAsync = fn => {
   return (req, res, next) => {
@@ -27,6 +28,9 @@ exports.getAllRecipes = catchAsync(async (req, res) => {
 
 exports.getRecipe = catchAsync(async (req, res) => {
   const recipe = await Recipe.findById(req.params.id);
+  if (!recipe) {
+    return next(new CustomError('No recipe found with that id', 404));
+  }
   res.status(200).json({
     status: 'success',
     data: {
@@ -54,6 +58,9 @@ exports.updateRecipe = catchAsync(async (req, res) => {
       runValidators: true
     }
   );
+  if (!updatedRecipe) {
+    return next(new CustomError('No recipe found with that id', 404));
+  }
   res.status(200).json({
     status: 'success',
     data: {
@@ -66,6 +73,9 @@ exports.deleteRecipe = catchAsync(async (req, res) => {
   const deletedRecipe = await Recipe.findByIdAndDelete(
     req.params.id
   );
+  if (!deletedRecipe) {
+    return next(new CustomError('No recipe found with that id', 404));
+  }
   res.status(200).json({
     status: 'success'
   });
