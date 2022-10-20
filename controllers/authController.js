@@ -4,6 +4,7 @@ const { promisify } = require('util');
 const User = require('./../models/userModel');
 const catchAsync = require('./../utils/catchAsync');
 const CustomError = require('./../utils/customError');
+const sendEmail = require('./../utils/email');
 
 // GENERATE JSON WEB TOKEN (USED WITHIN CONTROLLER)
 const generateJWT = id => {
@@ -127,7 +128,10 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   const resetToken = user.createPasswordResetToken();
   // In the user instance method we only modify, not save the changes to password token
   // So save here
-  await user.save;
+  // Also pass in option otherwise save will cause validation against all fields (we only want it for password related!)
+  await user.save({ validateBeforeSave: false });
+  // Then need to send reset token via email!
+
 });
 
 exports.resetPassword = (req, res, next) => {
