@@ -103,7 +103,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   next();
 });
 
-exports.restrict = (...roles) => {
+exports.restrictTo = (...roles) => {
   return (req, res, next) => {
     // roles is an array
     if (!roles.includes(req.user.role)) {
@@ -112,3 +112,14 @@ exports.restrict = (...roles) => {
     next();
   }
 }
+
+exports.forgotPassword = catchAsync(async (req, res, next) => {
+  const user = await User.findOne({ email: req.body.email});
+  if (!user) {
+    return next(new CustomError('This email address does not exist.', 404));
+  }
+});
+
+exports.resetPassword = (req, res, next) => {
+
+};

@@ -17,6 +17,11 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('tiny'));
 }
 
+// app.use((req, res, next) => {
+//   console.log(req.body);
+//   next();
+// });
+
 // Mount routes
 app.use('/api/v1/recipes', recipeRouter);
 app.use('/api/v1/users', userRouter);
