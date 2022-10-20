@@ -25,6 +25,7 @@ const recipeSchema = new mongoose.Schema(
       required: [true, 'A recipe title is required.'],
       trim: true
     },
+    slug: String,
     ingredients: [ingredientSchema],
     preparationTime: {
       type: Number,
@@ -52,6 +53,11 @@ const recipeSchema = new mongoose.Schema(
     }
   }
 );
+
+recipeSchema.pre('save', function(next) {
+  this.slug = slugify(this.name, { lower: true });
+  next();
+});
 
 const Recipe = mongoose.model('Recipe', recipeSchema);
 

@@ -6,6 +6,7 @@ const CustomError = require('./utils/customError');
 const globalErrorHandler = require('./controllers/errorController');
 
 const recipeRouter = require('./routes/recipeRoutes');
+const userRouter = require('./routes/userRoutes');
 
 // Instantiate app
 const app = express();
@@ -18,6 +19,7 @@ if (process.env.NODE_ENV === 'development') {
 
 // Mount routes
 app.use('/api/v1/recipes', recipeRouter);
+app.use('/api/v1/users', userRouter);
 
 // If above routes are not found trigger the below
 app.use('*', (req, res, next) => {

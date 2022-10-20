@@ -1,13 +1,8 @@
-const { update } = require('./../models/recipeModel');
+// const { update } = require('./../models/recipeModel');
 const Recipe = require('./../models/recipeModel');
 const ControllerHelper = require('./../utils/controllerHelper');
 const CustomError = require('./../utils/customError');
-
-const catchAsync = fn => {
-  return (req, res, next) => {
-    fn(req, res, next).catch(err => next(err));
-  };
-};
+const catchAsync = require('./../utils/catchAsync');
 
 exports.getAllRecipes = catchAsync(async (req, res) => {
   const queryConstruct = new ControllerHelper(Recipe, req.query)
