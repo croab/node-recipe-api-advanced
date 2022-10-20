@@ -4,6 +4,7 @@ const ControllerHelper = require('./../utils/controllerHelper');
 const CustomError = require('./../utils/customError');
 const catchAsync = require('./../utils/catchAsync');
 
+// GET ALL RECIPES
 exports.getAllRecipes = catchAsync(async (req, res) => {
   const queryConstruct = new ControllerHelper(Recipe, req.query)
                           .filter()
@@ -21,6 +22,7 @@ exports.getAllRecipes = catchAsync(async (req, res) => {
   });
 });
 
+// GET ONE RECIPE
 exports.getRecipe = catchAsync(async (req, res) => {
   const recipe = await Recipe.findById(req.params.id);
   if (!recipe) {
@@ -34,6 +36,7 @@ exports.getRecipe = catchAsync(async (req, res) => {
   });
 });
 
+// CREATE RECIPE
 exports.createRecipe = catchAsync(async (req, res) => {
   const newRecipe = await Recipe.create(req.body);
   res.status(201).json({
@@ -44,6 +47,7 @@ exports.createRecipe = catchAsync(async (req, res) => {
   });
 });
 
+// UPDATE RECIPE
 exports.updateRecipe = catchAsync(async (req, res) => {
   const updatedRecipe = await Recipe.findByIdAndUpdate(
     req.params.id,
@@ -64,6 +68,7 @@ exports.updateRecipe = catchAsync(async (req, res) => {
   });
 });
 
+// DELETE RECIPE
 exports.deleteRecipe = catchAsync(async (req, res) => {
   const deletedRecipe = await Recipe.findByIdAndDelete(
     req.params.id

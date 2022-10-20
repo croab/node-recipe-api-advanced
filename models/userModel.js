@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 
+// USER SCHEMA
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -45,7 +46,8 @@ const userSchema = new mongoose.Schema({
   passwordResetToken: String,
   passwordResetExpires: Date
 });
-
+// =====================================================================
+// PRE-SAVE CALLBACKS
 userSchema.pre('save', async function(next) {
   if (!this.isModified('password')) return next();
   // THe higher the cost parameter the better but also more CPU intensive
@@ -53,7 +55,9 @@ userSchema.pre('save', async function(next) {
   this.passwordConfirm = undefined;
   next();
 });
-
+// =====================================================================
+// INSTANCE METHODS
+// CHECK PASSWORD
 userSchema.methods.checkPassword = async function(
   candidatePassword,
   userPassword
@@ -61,6 +65,7 @@ userSchema.methods.checkPassword = async function(
   return await bcrypt.compare(candidatePassword, userPassword);
 };
 
+// CHECK IF PASSWORD WAS CHANGED AFTER JWT EXPIRATION
 userSchema.methods.changedPasswordAfter = function(JWTTimestamp) {
   if (this.passwordChangedOn) {
     const changedTimestamp = parseInt(
@@ -72,6 +77,7 @@ userSchema.methods.changedPasswordAfter = function(JWTTimestamp) {
   return false;
 };
 
+// CREATE PASSWORD RESET TOKEN
 userSchema.methods.createPasswordResetToken = function() {
   const resetToken = crypto.randomBytes(32).toString('hex');
 
@@ -79,6 +85,7 @@ userSchema.methods.createPasswordResetToken = function() {
     .createHash('sha256')
     .update(resetToken)
     .digest('hex');
+  console.log({resetToken}, this.passwordResetToken);
   this.passwordResetExpires = Date.now() + (10 * 60 * 1000);
   return resetToken;
 };

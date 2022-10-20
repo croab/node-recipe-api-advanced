@@ -1,4 +1,4 @@
-// Handle errors in development
+// HANDLE ERRORS IN DEV
 const sendErrDev = (err, res) => {
   res
     .status(err.statusCode)
@@ -9,7 +9,7 @@ const sendErrDev = (err, res) => {
       stack: err.stack
     });
 }
-// Handle errors in production
+// HANDLE ERRORS IN PROD
 const sendErrProd = (err, res) => {
   // Check if error is operational
   if (err.isOperational) {
@@ -32,6 +32,7 @@ const sendErrProd = (err, res) => {
   }
 }
 
+// MAIN: ERROR LOGIC
 module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'Error (generic)';

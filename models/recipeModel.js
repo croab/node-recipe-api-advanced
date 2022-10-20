@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+// INGREDIENT SUBSCHEMA
 const ingredientSchema = new mongoose.Schema(
   {
     ingredientName: {
@@ -18,6 +19,7 @@ const ingredientSchema = new mongoose.Schema(
   }
 );
 
+// RECIPE SCHEMA
 const recipeSchema = new mongoose.Schema(
   {
     title: {
@@ -54,11 +56,13 @@ const recipeSchema = new mongoose.Schema(
   }
 );
 
+// PRE-SAVE CALLBACKS
 recipeSchema.pre('save', function(next) {
   this.slug = slugify(this.name, { lower: true });
   next();
 });
 
+// CREATE RECIPE MODEL
 const Recipe = mongoose.model('Recipe', recipeSchema);
 
 module.exports = Recipe;

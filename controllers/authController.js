@@ -5,6 +5,7 @@ const User = require('./../models/userModel');
 const catchAsync = require('./../utils/catchAsync');
 const CustomError = require('./../utils/customError');
 
+// GENERATE JSON WEB TOKEN (USED WITHIN CONTROLLER)
 const generateJWT = id => {
   return new Promise((resolve, reject) => {
     jwt.sign(
@@ -24,6 +25,7 @@ const generateJWT = id => {
   });
 };
 
+// HANDLE SIGNUP
 // Async because uses db operations
 exports.signup = catchAsync(async (req, res, next) => {
   // The below prevents used from specifying their admin role!
@@ -47,6 +49,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   });
 });
 
+// HANDLE LOGIN
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
   // Check if email and pass exist
@@ -71,6 +74,7 @@ exports.login = catchAsync(async (req, res, next) => {
   });
 });
 
+// HANDLE AUTHENTICATION
 exports.protect = catchAsync(async (req, res, next) => {
   // 1. Get token and check it exists
   let token = '';
@@ -103,6 +107,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   next();
 });
 
+// RESTRICT ROUTES BASED ON USER ROLE
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
     // roles is an array
@@ -113,11 +118,16 @@ exports.restrictTo = (...roles) => {
   }
 }
 
+// FORGOTTEN PASSWORD
 exports.forgotPassword = catchAsync(async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email});
   if (!user) {
     return next(new CustomError('This email address does not exist.', 404));
   }
+  const resetToken = user.createPasswordResetToken();
+  // In the user instance method we only modify, not save the changes to password token
+  // So save here
+  await user.save;
 });
 
 exports.resetPassword = (req, res, next) => {
