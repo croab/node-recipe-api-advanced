@@ -34,13 +34,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please confirm your password.'],
     validate: {
-      // Need access to this here so no arrow function
       // Only runs on CREATE and SAVE!
       validator: function(el) {
         return el === this.password;
-      }
-    },
-    message: 'Passwords should be the same.'
+      },
+      message: 'Passwords should be the same.'
+    }
   },
   passwordChangedOn: Date,
   passwordResetToken: String,
@@ -48,11 +47,19 @@ const userSchema = new mongoose.Schema({
 });
 // =====================================================================
 // PRE-SAVE CALLBACKS
+
+// ENCRYPT PASSWORD AND RESET PASSWORD CONFIRM
 userSchema.pre('save', async function(next) {
   if (!this.isModified('password')) return next();
   // THe higher the cost parameter the better but also more CPU intensive
   this.password = await bcrypt.hash(this.password, 12);
   this.passwordConfirm = undefined;
+  next();
+});
+
+userSchema.pre('save', async function(next) {
+  if (this.isModified('password') || this.isNew) return next();
+  this.passwordChangedOn = Date.now();
   next();
 });
 // =====================================================================

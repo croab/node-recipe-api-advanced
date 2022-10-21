@@ -176,16 +176,21 @@ exports.resetPassword = async (req, res, next) => {
   user.passwordResetToken = undefined;
   user.passwordResetExpires = undefined;
   // Validators will run here on save
-  await user.save;
+  try {
+    await user.save();
 
-  const token = await generateJWT(user.id);
+    const token = await generateJWT(user.id);
 
-  // 200 for created
-  res.status(200).json({
-    status: 'success',
-    token,
-    data: {
-      user: newUser
-    }
-  });
+    // 200 for created
+    res.status(200).json({
+      status: 'success',
+      token,
+      data: {
+        user: user
+      }
+    });
+  } catch (err) {
+    return next(new CustomError(`User could not be saved: ${err._message}`, 403));
+  }
+
 };
