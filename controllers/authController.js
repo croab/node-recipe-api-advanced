@@ -121,17 +121,38 @@ exports.restrictTo = (...roles) => {
 
 // FORGOTTEN PASSWORD
 exports.forgotPassword = catchAsync(async (req, res, next) => {
+  // Find user if present
   const user = await User.findOne({ email: req.body.email});
   if (!user) {
     return next(new CustomError('This email address does not exist.', 404));
   }
+  // Create reset token
   const resetToken = user.createPasswordResetToken();
-  // In the user instance method we only modify, not save the changes to password token
-  // So save here
-  // Also pass in option otherwise save will cause validation against all fields (we only want it for password related!)
+  // Save and pass in option otherwise save will cause validation against all fields (we only want it for password related!)
   await user.save({ validateBeforeSave: false });
-  // Then need to send reset token via email!
-
+  // Then send reset token via email!
+  // Sending plain, unencrypted token here
+  const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/reset-password/${resetToken}`;
+  const message = `Forgotten you password? For now submit a patch req with new password and password confirm to ${resetURL}.`;
+  // Want to do more than just send error so cannot use my custom Error handler here
+  try {
+    await sendEmail({
+      email: user.email,
+      subject: 'Your password reset token - valid for 10 minutes.',
+      message: message
+    });
+    res.status(200).json({
+      status: 'success',
+      message: 'Token sent to email.'
+    });
+  } catch (err) {
+    // Reset the reset token
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    await user.save({ validateBeforeSave: false });
+    // and throw and error
+    return next(new CustomError('Error sending email. Try again later.', 500));
+  }
 });
 
 exports.resetPassword = (req, res, next) => {

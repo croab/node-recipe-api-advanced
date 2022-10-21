@@ -17,7 +17,7 @@ const sendEmail = async options => {
     // html:
   };
   // Below returns a promise - don't think need to save result here
-  await transport.sendMail(mailOptions);
+  await transporter.sendMail(mailOptions);
 };
 
 module.exports = sendEmail;
