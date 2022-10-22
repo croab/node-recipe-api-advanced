@@ -4,15 +4,19 @@ const authController = require('./../controllers/authController');
 
 const router = express.Router();
 
+// CUSTOM ROUTES FOR AUTHORIZATION
 router.post('/signup', authController.signup);
 router.post('/login', authController.login);
 
 router.post('/forgotten-password', authController.forgotPassword);
 router.patch('/reset-password/:token', authController.resetPassword);
-
 router.patch('/update-my-password', authController.protect, authController.updatePassword);
-router.patch('/update-me', authController.protect, userController.updateMe);
 
+// CUSTOM ROUTES FOR USERS
+router.patch('/update-me', authController.protect, userController.updateMe);
+router.delete('/delete-me', authController.protect, userController.deleteMe);
+
+// OTHER ROUTES
 router
   .route('/')
   .get(userController.getAllUsers)

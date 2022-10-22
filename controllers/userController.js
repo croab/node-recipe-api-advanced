@@ -15,6 +15,44 @@ const filterObj = (obj, ...allowedFields) => {
 };
 
 // CONTROLLER ACTIONS =============================
+// FOR CURRENT AUTHENTICATED USER =====
+// UPDATE ME
+exports.updateMe = catchAsync(async (req, res, next) => {
+  // Firstly need to prevent user from posting password data here
+  if (req.body.password || req.body.passwordConfirm) {
+    return next(new CustomError('This is the wrong location for udating your password. Please do so at /update-my-password', 400));
+  }
+  // Filter out unwanted fields!
+  const filteredBody = filterObj(req.body, 'name', 'email');
+  const updatedUser = await User.findByIdAndUpdate(
+    req.user.id,
+    filteredBody,
+    {
+      new: true,
+      runValidators: true
+    }
+  );
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user: updatedUser
+    }
+  });
+});
+
+// DELETE ME
+exports.deleteMe = catchAsync(async (req, res, next) => {
+  const user = await User.findByIdAndUpdate(
+    req.user.id,
+    { active: false }
+  );
+  res.status(204).json({
+    status: 'success',
+    data: null
+  })
+});
+
+// FOR ADMIN =====
 // GET ALL USERS
 exports.getAllUsers = catchAsync(async (req, res, next) => {
   const users = await User.find();
@@ -45,31 +83,7 @@ exports.createUser = (req, res) => {
   });
 };
 
-// UPDATE ME (CURRENT AUTHENTICATED USER)
-exports.updateMe = catchAsync(async (req, res, next) => {
-  // Firstly need to prevent user from posting password data here
-  if (req.body.password || req.body.passwordConfirm) {
-    return next(new CustomError('This is the wrong location for udating your password. Please do so at /update-my-password', 400));
-  }
-  // Filter out unwanted fields!
-  const filteredBody = filterObj(req.body, 'name', 'email');
-  const updatedUser = await User.findByIdAndUpdate(
-    req.user.id,
-    filteredBody,
-    {
-      new: true,
-      runValidators: true
-    }
-  );
-  res.status(200).json({
-    status: 'success',
-    data: {
-      user: updatedUser
-    }
-  });
-});
-
-// UPDATE USER (ADMIN) (INCOMPLETE)
+// UPDATE USER (INCOMPLETE)
 exports.updateUser = (req, res) => {
   res.status(500).json({
     status: 'error',
