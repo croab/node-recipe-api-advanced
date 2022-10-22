@@ -31,6 +31,19 @@ const generateJWT = id => {
 const createAndSendToken = async (user, statusCode, res) => {
   // I have made this an async function as handling a promise
   const token = await generateJWT(user._id);
+  const cookieOptions = {
+    expires: new Date(Date.now() + (process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000)),
+    // Cookie cannot be modified by browser (cross site scripting attack prevention)
+    httpOnly: true
+  };
+  if (process.env.NODE_ENV === 'production') {
+    // Cookie only sent on encrypted connection (https)
+    // Can only be done over https on production
+    cookieOptions.secure = true
+  }
+  res.cookie('jwt', token, cookieOptions);
+  // Remove password from output but not save to db
+  user.password = undefined;
   res.status(statusCode).json({
     status: 'success',
     token: token,
