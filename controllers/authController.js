@@ -9,6 +9,7 @@ const sendEmail = require('./../utils/email');
 
 // GENERATE JSON WEB TOKEN (USED WITHIN CONTROLLER)
 const generateJWT = id => {
+  // return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
   return new Promise((resolve, reject) => {
     jwt.sign(
       {
@@ -27,6 +28,18 @@ const generateJWT = id => {
   });
 };
 
+const createAndSendToken = async (user, statusCode, res) => {
+  // I have made this an async function as handling a promise
+  const token = await generateJWT(user._id);
+  res.status(statusCode).json({
+    status: 'success',
+    token: token,
+    data: {
+      user
+    }
+  });
+};
+
 // HANDLE SIGNUP
 // Async because uses db operations
 exports.signup = catchAsync(async (req, res, next) => {
@@ -39,16 +52,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     passwordChangedOn: req.body.passwordChangedOn
   });
 
-  const token = await generateJWT(newUser._id);
-
-  // 201 for created
-  res.status(201).json({
-    status: 'success',
-    token,
-    data: {
-      user: newUser
-    }
-  });
+  await createAndSendToken(newUser, 201, res);
 });
 
 // HANDLE LOGIN
@@ -69,11 +73,7 @@ exports.login = catchAsync(async (req, res, next) => {
   }
 
   // If everything is ok, send the jwt to client
-  const token = await generateJWT(user._id);
-  res.status(200).json({
-    status: 'success',
-    token: token
-  });
+  createAndSendToken(user, 200, res);
 });
 
 // HANDLE AUTHENTICATION
@@ -178,19 +178,37 @@ exports.resetPassword = async (req, res, next) => {
   // Validators will run here on save
   try {
     await user.save();
+    await createAndSendToken(user, 200, res);
+    // const token = await generateJWT(user._id);
 
-    const token = await generateJWT(user.id);
-
-    // 200 for created
-    res.status(200).json({
-      status: 'success',
-      token,
-      data: {
-        user: user
-      }
-    });
+    // // 200 for created
+    // res.status(200).json({
+    //   status: 'success',
+    //   token,
+    //   data: {
+    //     user: user
+    //   }
+    // });
   } catch (err) {
     return next(new CustomError(`User could not be saved: ${err._message}`, 403));
   }
 
 };
+
+// UPDATE PASSWORD
+exports.updatePassword = catchAsync(async (req, res, next) => {
+  // Get user from collection
+  // Due to the protect middleware, user will be on req
+  const user = await User.findById(req.user.id).select('+password');
+  // Check if posted password is correct
+  const password = req.body.passwordCurrent;
+  if (!(await user.checkPassword(password, user.password))) {
+    return next(new CustomError('Your current password is incorrect.', 401));
+  }
+  // If so update password
+  user.password = req.body.password;
+  user.passwordConfirm = req.body.passwordConfirm;
+  await user.save();
+  // Log user in (send JWT back to user)
+  await createAndSendToken(user, 200, res);
+});
