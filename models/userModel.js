@@ -43,10 +43,17 @@ const userSchema = new mongoose.Schema({
   },
   passwordChangedOn: Date,
   passwordResetToken: String,
-  passwordResetExpires: Date
+  passwordResetExpires: Date,
+  active: {
+    type: Boolean,
+    default: true,
+    select: false
+  }
 });
+
 // =====================================================================
-// PRE-SAVE CALLBACKS
+// PRE-SAVE MIDDLEWARE
+// 'this' here will point to the document
 
 // ENCRYPT PASSWORD AND RESET PASSWORD CONFIRM
 userSchema.pre('save', async function(next) {
@@ -63,6 +70,14 @@ userSchema.pre('save', async function(next) {
   this.passwordChangedOn = Date.now();
   next();
 });
+
+// PRE-FIND MIDDLEWARE
+// 'this' here will point to the current query
+userSchema.pre(/^find/, function(next) {
+  this.find({ active: { $ne: false } });
+  next();
+});
+
 // =====================================================================
 // INSTANCE METHODS
 // CHECK PASSWORD
