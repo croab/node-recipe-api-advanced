@@ -1,22 +1,22 @@
 const express = require('express');
-const recipeController = require('./../controllers/recipeController');
+const cookbookController = require('./../controllers/cookbookController');
 const authController = require('./../controllers/authController');
 
 const router = express.Router();
 
 router
   .route('/')
-  .get(authController.protect, recipeController.getAllRecipes)
-  .post(recipeController.createRecipe);
+  .get(authController.protect, recipeController.getAllCookbooks)
+  .post(recipeController.createCookbook);
 
 router
   .route('/:id')
-  .get(recipeController.getRecipe)
-  .patch(recipeController.updateRecipe)
+  .get(recipeController.getCookbook)
+  .patch(recipeController.updateCookbook)
   .delete(
     authController.protect,
     authController.restrictTo('admin', 'head-chef'),
-    recipeController.deleteRecipe
+    recipeController.deleteCookbook
   );
 
 module.exports = router;

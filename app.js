@@ -11,6 +11,7 @@ const CustomError = require('./utils/customError');
 const globalErrorHandler = require('./controllers/errorController');
 
 const recipeRouter = require('./routes/recipeRoutes');
+const cookbookRouter = require('./routes/cookbookRoutes');
 const userRouter = require('./routes/userRoutes');
 
 // Instantiate app
@@ -60,6 +61,7 @@ app.use(hpp({
 
 // MOUNT ROUTES ===============================================
 app.use('/api/v1/recipes', recipeRouter);
+app.use('/api/v1/cookbooks', cookbookRouter);
 app.use('/api/v1/users', userRouter);
 
 // If above routes are not found trigger the below
