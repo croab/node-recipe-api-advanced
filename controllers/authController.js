@@ -84,7 +84,7 @@ exports.login = catchAsync(async (req, res, next) => {
   if (!user || !(await user.checkPassword(password, user.password))) {
     return next(new CustomError('Incorrect email or password', 401));
   }
-
+  // Cannot assign user to req.user here as req res cycle ends after this. Would need a piece of middleware before each route if did it that way.
   // If everything is ok, send the jwt to client
   createAndSendToken(user, 200, res);
 });
