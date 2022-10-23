@@ -52,8 +52,31 @@ const recipeSchema = new mongoose.Schema(
         ],
         message: 'Dietary should be either vegetarian, vegan or gluten-free.'
       }
+    },
+    difficulty: {
+      type: String,
+      enum: {
+        values: [
+          'easy',
+          'medium',
+          'hard'
+        ],
+        message: 'Difficulty should be either easy, medium or hard.'
+      }
+    },
+    price: {
+      type: Number,
+      enum: {
+        values: [
+          '$',
+          '$$',
+          '$$$'
+        ],
+        message: 'Price should be either $, $$, or $$$.'
+      }
     }
   }
+  // SHOULD CHECK IF ADDITIONAL FIELDS NEED TO BE HPP WHITELISTED
 );
 
 // PRE-SAVE CALLBACKS

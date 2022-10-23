@@ -1,6 +1,11 @@
 // Imports
 const express = require('express');
 const morgan = require('morgan');
+const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
+const hpp = require('hpp');
 
 const CustomError = require('./utils/customError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -11,18 +16,49 @@ const userRouter = require('./routes/userRoutes');
 // Instantiate app
 const app = express();
 
-// Implement middlewares
-app.use(express.json());
+// GLOBAL MIDDLEWARE =========================================
+// SET SECURITY HTTP HEADERS
+// App.use needs function not a function call
+// helmet() returns this function which stays until called
+app.use(helmet());
+
+// DEV LOGGING
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('tiny'));
 }
 
-// app.use((req, res, next) => {
-//   console.log(req.body);
-//   next();
-// });
+// REQUEST LIMITING
+const limiter = rateLimit({
+  max: 100,
+  windowMs: 60 * 60 * 100,
+  message: 'Too many requests from this IP. Please try again in an hour.'
+});
+app.use('/api', limiter);
 
-// Mount routes
+// BODY PARSING (put data from body into req.body)
+// Limit data coming in body
+app.use(express.json({ limit: '10kb' }));
+
+// DATA SANITIZATION VS NOSQL QUERY INJECTION
+app.use(mongoSanitize());
+
+// DATA SANTIZATION VS CROSS-SITE SCRIPTING ATTACKS
+app.use(xss());
+
+// PROTECT VS PARAM POLLUTION
+app.use(hpp({
+  whitelist: [
+    'preparationTime',
+    'cookingTime',
+    'serves',
+    'difficulty',
+    'price'
+  ]
+}));
+
+// Could serve static files here........
+
+// MOUNT ROUTES ===============================================
 app.use('/api/v1/recipes', recipeRouter);
 app.use('/api/v1/users', userRouter);
 
