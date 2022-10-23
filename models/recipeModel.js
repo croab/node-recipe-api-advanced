@@ -15,7 +15,13 @@ const ingredientSchema = new mongoose.Schema(
     quantityUnit: {
       type: String,
       required: [true, 'An quantity must have a unit.']
-    }
+    },
+    contributingChefs: [
+      {
+        type: mongoose.Schema.ObjectId,
+        reference: 'User'
+      }
+    ]
   }
 );
 
