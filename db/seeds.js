@@ -1,33 +1,43 @@
 /* seeds.js */
-const MongoClient = require("mongodb").MongoClient;
+// const MongoClient = require("mongodb").MongoClient;
+const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 dotenv.config({ path: './config.env' });
-const recipes = require('./data');
 
-async function seedDB() {
-    // Connection URL
-    const uri = process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD);
-    const client = new MongoClient(uri, {
-        useNewUrlParser: true
-        // useUnifiedTopology: true,
+const User = require('./../models/userModel');
+const Recipe = require('./../models/recipeModel');
+const users = require('./userData');
+const recipes = require('./recipeData');
+
+const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD);
+
+mongoose.connect(DB).then(() => {
+  console.log('DB connection successful');
+});
+
+const clearDB = async () => {
+  try {
+    await Recipe.deleteMany();
+    await User.deleteMany();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const seedUsers = async () => {
+  try {
+    users.forEach(async user => {
+      await User.create(user);
     });
+  } catch (err) {
+    console.log(err);
+  }
 
-    try {
-        await client.connect();
-        console.log("Connected correctly to server");
+};
 
-        const collection = client.db("node-recipes-api").collection("recipes");
-
-        // Destroy existing data
-        collection.deleteMany();
-
-        await collection.insertMany(recipes);
-
-        console.log("Database seeded! :)");
-        client.close();
-    } catch (err) {
-        console.log(err.stack);
-    }
-}
-
-seedDB();
+clearDB();
+seedUsers();
+// User.find({}, vals => console.log(vals));
+// .then(() => {
+//   mongoose.connection.close();
+// });

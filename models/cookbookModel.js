@@ -42,6 +42,15 @@ const cookbookSchema = new mongoose.Schema(
     ]
   }
 );
+
+cookbookSchema.pre(/^find/, function(next) {
+  this.populate({
+    path: 'contributingChefs',
+    select: '-__v -passwordChangedOn'
+  });
+  next();
+});
+
 // IF EMBED USED: Turn contributing CHEF ID TO DOCUMENT
 // cookbookSchema.pre('save', async function(next) {
 //   const contributingChefsPromises = this.contributingChefs.map(async id => await User.findById(id));
