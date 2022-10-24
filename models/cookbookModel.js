@@ -31,8 +31,7 @@ const cookbookSchema = new mongoose.Schema(
       trim: true
     },
     imageCover: {
-      type: String,
-      required: [true, 'A cookbook must have a cover image']
+      type: String
     },
     contributingChefs: [
       {

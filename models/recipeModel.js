@@ -31,7 +31,8 @@ const recipeSchema = new mongoose.Schema(
     slug: String,
     ingredients: [ingredientSchema],
     cuisine: {
-      type: String
+      type: String,
+      required: [true, 'A recipe must belong to a cuisine.']
     },
     preparationTime: {
       type: Number,

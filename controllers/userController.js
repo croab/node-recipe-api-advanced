@@ -20,7 +20,7 @@ const filterObj = (obj, ...allowedFields) => {
 exports.updateMe = catchAsync(async (req, res, next) => {
   // Firstly need to prevent user from posting password data here
   if (req.body.password || req.body.passwordConfirm) {
-    return next(new CustomError('This is the wrong location for udating your password. Please do so at /update-my-password', 400));
+    return next(new CustomError('This is the wrong location for updating your password. Please do so at /update-my-password', 400));
   }
   // Filter out unwanted fields!
   const filteredBody = filterObj(req.body, 'name', 'email');
