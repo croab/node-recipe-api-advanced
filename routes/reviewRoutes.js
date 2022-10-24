@@ -12,11 +12,21 @@ router
   .post(
     authController.protect,
     authController.restrictTo('user'),
+    reviewController.setRecipeAndUserIds,
     reviewController.createReview
   );
 
 router
   .route('/:id')
-  .delete(reviewController.deleteReview);
+  .patch(
+    authController.protect,
+    authController.restrictTo('admin'),
+    reviewController.updateReview
+  )
+  .delete(
+    authController.protect,
+    authController.restrictTo('admin'),
+    reviewController.deleteReview
+  );
 
 module.exports = router;

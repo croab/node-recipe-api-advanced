@@ -49,26 +49,11 @@ exports.createRecipe = catchAsync(async (req, res) => {
   });
 });
 
+// CREATE RECIPE
+exports.createRecipe = factory.createOne(Recipe);
+
 // UPDATE RECIPE
-exports.updateRecipe = catchAsync(async (req, res) => {
-  const updatedRecipe = await Recipe.findByIdAndUpdate(
-    req.params.id,
-    req.body,
-    {
-      new: true,
-      runValidators: true
-    }
-  );
-  if (!updatedRecipe) {
-    return next(new CustomError('No recipe found with that id', 404));
-  }
-  res.status(200).json({
-    status: 'success',
-    data: {
-      recipe: updatedRecipe
-    }
-  });
-});
+exports.updateRecipe = factory.updateOne(Recipe);
 
 // DELETE RECIPE
 exports.deleteRecipe = factory.deleteOne(Recipe);
