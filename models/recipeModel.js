@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 
 // INGREDIENT SUBSCHEMA
 const ingredientSchema = new mongoose.Schema(
@@ -54,9 +55,10 @@ const recipeSchema = new mongoose.Schema(
         values: [
           'vegetarian',
           'vegan',
-          'gluten-free'
+          'gluten-free',
+          ''
         ],
-        message: 'Dietary should be either vegetarian, vegan or gluten-free.'
+        message: 'Dietary should be either an empty string, vegetarian, vegan or gluten-free.'
       }
     },
     difficulty: {
@@ -71,7 +73,7 @@ const recipeSchema = new mongoose.Schema(
       }
     },
     price: {
-      type: Number,
+      type: String,
       enum: {
         values: [
           '$',
@@ -93,7 +95,7 @@ const recipeSchema = new mongoose.Schema(
 
 // PRE-SAVE CALLBACKS
 recipeSchema.pre('save', function(next) {
-  this.slug = slugify(this.name, { lower: true });
+  this.slug = slugify(this.title, { lower: true });
   next();
 });
 

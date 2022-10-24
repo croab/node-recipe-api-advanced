@@ -24,7 +24,7 @@ const recipes = (userIds) => {
       serves: 8,
       dietary: 'vegetarian',
       difficulty: 'hard',
-      price: 30.0,
+      price: '$',
       contributingChefs: userIds[0]
     },
     {
@@ -51,7 +51,7 @@ const recipes = (userIds) => {
       serves: 8,
       dietary: 'vegan',
       difficulty: 'easy',
-      price: 25.0,
+      price: '$$',
       contributingChefs: userIds[1]
     },
     {
@@ -78,7 +78,7 @@ const recipes = (userIds) => {
       serves: 8,
       dietary: 'vegetarian',
       difficulty: 'medium',
-      price: 20.0,
+      price: '$$$',
       contributingChefs: userIds[2]
     },
     {
@@ -95,7 +95,7 @@ const recipes = (userIds) => {
       serves: 4,
       dietary: '',
       difficulty: 'easy',
-      price: 25.0,
+      price: '$',
       contributingChefs: userIds[3]
     }
   ]);

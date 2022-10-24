@@ -9,34 +9,26 @@ const Recipe = require('./../models/recipeModel');
 const users = require('./userData');
 const recipes = require('./recipeData');
 
-const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD);
+seedDB = async () => {
+  const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD);
 
-mongoose.connect(DB).then(() => {
-  console.log('DB connection successful');
-});
+  mongoose.connect(DB).then(() => {
+    console.log('DB connection successful');
+  });
 
-const clearDB = async () => {
-  try {
-    await Recipe.deleteMany();
-    await User.deleteMany();
-  } catch (err) {
-    console.log(err);
-  }
+  await Recipe.deleteMany();
+  await User.deleteMany();
+
+  await User.create(users);
+
+  const allUsers = await User.find();
+  const allUserIds = allUsers.map(user => user.id);
+  console.log(allUserIds);
+  console.log(recipes(allUserIds));
+  await Recipe.create(recipes(allUserIds));
 };
 
-const seedUsers = async () => {
-  try {
-    users.forEach(async user => {
-      await User.create(user);
-    });
-  } catch (err) {
-    console.log(err);
-  }
-
-};
-
-clearDB();
-seedUsers();
+seedDB();
 // User.find({}, vals => console.log(vals));
 // .then(() => {
 //   mongoose.connection.close();
