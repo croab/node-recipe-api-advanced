@@ -18,7 +18,8 @@ exports.createReview = catchAsync(async (req, res, next) => {
   // Set to account for nested routes
   if (!req.body.recipe) req.body.recipe = req.params.recipeId;
   if (!req.body.user) req.body.user = req.user.id;
-
+  console.log(req.body.user);
+  console.log(req.body.recipe);
   const newReview = await Review.create(req.body);
   res.status(201).json({
     status: 'success',

@@ -1,11 +1,11 @@
 const express = require('express');
 const recipeController = require('./../controllers/recipeController');
 const authController = require('./../controllers/authController');
-const reviewRouter = require('./routes/reviewRoutes');
+const reviewRouter = require('./reviewRoutes');
 
 const router = express.Router();
 
-router.use('/:tourId/reviews', reviewRouter);
+router.use('/:recipeId/reviews', reviewRouter);
 
 router
   .route('/')
