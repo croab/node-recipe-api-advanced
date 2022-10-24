@@ -21,10 +21,10 @@ router
   );
 
 router
-  .route('/:tourId/reviews')
+  .route('/:recipeId/reviews')
   .post(
     authController.protect,
-    authController.restrictTo('users'),
+    authController.restrictTo('user'),
     reviewController.createReview
   );
 
