@@ -36,6 +36,26 @@ const reviewSchema = new mongoose.Schema(
     toObject: { virtuals: true }
   }
 );
+// MIDDLEWARE
+// reviewSchema.pre(/^find/, function(next) {
+//   this.populate({
+//     path: 'user',
+//     select: 'name'
+//     // Also photo
+//   }).populate({
+//     path: 'recipe',
+//     select: 'title -contributingChefs'
+//   });
+//   next();
+// });
+reviewSchema.pre(/^find/, function(next) {
+  this.populate({
+    path: 'user',
+    select: 'name'
+    // Also photo
+  });
+  next();
+});
 
 const Review = mongoose.model('Review', reviewSchema);
 

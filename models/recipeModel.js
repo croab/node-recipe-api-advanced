@@ -87,9 +87,20 @@ const recipeSchema = new mongoose.Schema(
         ref: 'User'
       }
     ]
+  },
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
   }
   // SHOULD CHECK IF ADDITIONAL FIELDS NEED TO BE HPP WHITELISTED
 );
+
+// VIRTUALS
+recipeSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'recipe',
+  localField: '_id'
+});
 
 // PRE-SAVE CALLBACKS
 recipeSchema.pre('save', function(next) {
