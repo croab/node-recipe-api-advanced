@@ -7,9 +7,11 @@ dotenv.config({ path: './config.env' });
 const User = require('./../models/userModel');
 const Recipe = require('./../models/recipeModel');
 const Cookbook = require('./../models/cookbookModel');
+const Review = require('./../models/reviewModel');
 const users = require('./userData');
 const recipes = require('./recipeData');
 const cookbooks = require('./cookbookData');
+const reviews = require('./reviewData');
 
 seedDB = async () => {
   const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD);
@@ -21,6 +23,7 @@ seedDB = async () => {
   await Cookbook.deleteMany();
   await Recipe.deleteMany();
   await User.deleteMany();
+  await Review.deleteMany();
 
   // CREATE USERS
   await User.create(users);
@@ -34,6 +37,9 @@ seedDB = async () => {
 
   // CREATE COOKBOOKS
   await Cookbook.create(cookbooks(allUserIds, allRecipeIds));
+
+  // CREATE REVIEWS
+  await Review.create(reviews(allUserIds, allRecipeIds));
 };
 
 seedDB();

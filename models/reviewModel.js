@@ -16,20 +16,16 @@ const reviewSchema = new mongoose.Schema(
       default: Date.now(),
       select: false
     },
-    recipe: [
-      {
-        type: mongoose.Schema.ObjectId,
-        ref: 'Recipe',
-        required: [true, 'A review must belong to a recipe']
-      }
-    ],
-    user: [
-      {
-        type: mongoose.Schema.ObjectId,
-        ref: 'User',
-        required: [true, 'A review must belong to a user']
-      }
-    ]
+    recipe: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Recipe',
+      required: [true, 'A review must belong to a recipe']
+    },
+    user: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
+      required: [true, 'A review must belong to a user']
+    }
   },
   {
     toJSON: { virtuals: true },

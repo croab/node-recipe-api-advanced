@@ -1,6 +1,7 @@
 const CustomError = require('../utils/customError');
 const User = require('./../models/userModel');
 const catchAsync = require('./../utils/catchAsync');
+const factory = require('./handlerFactory');
 
 // HELPER FUNCTIONS ===============================
 // ...allowedFields creates an array of arguments passed in
@@ -92,9 +93,4 @@ exports.updateUser = (req, res) => {
 };
 
 // DELETE USER (INCOMPLETE)
-exports.deleteUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!'
-  });
-};
+exports.deleteUser = factory.deleteOne(User);
