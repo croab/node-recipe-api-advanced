@@ -3,6 +3,7 @@ const Recipe = require('./../models/recipeModel');
 const ControllerHelper = require('./../utils/controllerHelper');
 const CustomError = require('./../utils/customError');
 const catchAsync = require('./../utils/catchAsync');
+const factory = require('./handlerFactory');
 
 // GET ALL RECIPES
 exports.getAllRecipes = catchAsync(async (req, res) => {
@@ -70,14 +71,16 @@ exports.updateRecipe = catchAsync(async (req, res) => {
 });
 
 // DELETE RECIPE
-exports.deleteRecipe = catchAsync(async (req, res) => {
-  const deletedRecipe = await Recipe.findByIdAndDelete(
-    req.params.id
-  );
-  if (!deletedRecipe) {
-    return next(new CustomError('No recipe found with that id', 404));
-  }
-  res.status(200).json({
-    status: 'success'
-  });
-});
+exports.deleteRecipe = factory.deleteOne(Recipe);
+// exports.deleteRecipe = catchAsync(async (req, res) => {
+//   const deletedRecipe = await Recipe.findByIdAndDelete(
+//     req.params.id
+//   );
+//   if (!deletedRecipe) {
+//     return next(new CustomError('No recipe found with that id', 404));
+//   }
+//   res.status(204).json({
+//     status: 'success',
+//     data: null
+//   });
+// });
