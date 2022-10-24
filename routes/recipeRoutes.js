@@ -1,6 +1,7 @@
 const express = require('express');
 const recipeController = require('./../controllers/recipeController');
 const authController = require('./../controllers/authController');
+const reviewController = require('./../controllers/reviewController');
 
 const router = express.Router();
 
@@ -17,6 +18,14 @@ router
     authController.protect,
     authController.restrictTo('admin', 'head-chef'),
     recipeController.deleteRecipe
+  );
+
+router
+  .route('/:tourId/reviews')
+  .post(
+    authController.protect,
+    authController.restrictTo('users'),
+    reviewController.createReview
   );
 
 module.exports = router;
