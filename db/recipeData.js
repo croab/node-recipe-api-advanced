@@ -19,6 +19,7 @@ const recipes = (userIds) => {
           quantityUnit: 'grams'
         }
       ],
+      cuisine: 'Dessert',
       preparationTime: 25,
       cookingTime: 35,
       serves: 8,
@@ -46,6 +47,7 @@ const recipes = (userIds) => {
           quantityUnit: 'grams'
         }
       ],
+      cuisine: 'Dessert',
       preparationTime: 20,
       cookingTime: 25,
       serves: 8,
@@ -73,6 +75,7 @@ const recipes = (userIds) => {
           quantityUnit: 'grams'
         }
       ],
+      cuisine: 'Dessert',
       preparationTime: 30,
       cookingTime: 40,
       serves: 8,
@@ -90,6 +93,7 @@ const recipes = (userIds) => {
           quantityUnit: 'units'
         }
       ],
+      cuisine: 'Dessert',
       preparationTime: 5,
       cookingTime: 180,
       serves: 4,

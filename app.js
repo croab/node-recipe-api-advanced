@@ -13,6 +13,8 @@ const globalErrorHandler = require('./controllers/errorController');
 const recipeRouter = require('./routes/recipeRoutes');
 const cookbookRouter = require('./routes/cookbookRoutes');
 const userRouter = require('./routes/userRoutes');
+const reviewRouter = require('./routes/reviewRoutes');
+
 
 // Instantiate app
 const app = express();
@@ -63,6 +65,7 @@ app.use(hpp({
 app.use('/api/v1/recipes', recipeRouter);
 app.use('/api/v1/cookbooks', cookbookRouter);
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/reviews', reviewRouter);
 
 // If above routes are not found trigger the below
 app.use('*', (req, res, next) => {

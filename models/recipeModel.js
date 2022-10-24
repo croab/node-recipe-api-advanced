@@ -30,6 +30,10 @@ const recipeSchema = new mongoose.Schema(
     },
     slug: String,
     ingredients: [ingredientSchema],
+    cuisine: {
+      type: String,
+      required: [true, 'A recipe must belong to a cuisine.']
+    },
     preparationTime: {
       type: Number,
       required: [true, 'A recipe must have a prep time.']
@@ -83,9 +87,20 @@ const recipeSchema = new mongoose.Schema(
         ref: 'User'
       }
     ]
+  },
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
   }
   // SHOULD CHECK IF ADDITIONAL FIELDS NEED TO BE HPP WHITELISTED
 );
+
+// VIRTUALS
+recipeSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'recipe',
+  localField: '_id'
+});
 
 // PRE-SAVE CALLBACKS
 recipeSchema.pre('save', function(next) {

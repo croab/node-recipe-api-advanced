@@ -24,7 +24,8 @@ exports.getAllRecipes = catchAsync(async (req, res) => {
 
 // GET ONE RECIPE
 exports.getRecipe = catchAsync(async (req, res) => {
-  const recipe = await Recipe.findById(req.params.id);
+  const recipe = await Recipe.findById(req.params.id).populate('reviews');
+  console.log(recipe);
   if (!recipe) {
     return next(new CustomError('No recipe found with that id', 404));
   }
