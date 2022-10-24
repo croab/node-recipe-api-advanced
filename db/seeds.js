@@ -23,8 +23,6 @@ seedDB = async () => {
 
   const allUsers = await User.find();
   const allUserIds = allUsers.map(user => user.id);
-  console.log(allUserIds);
-  console.log(recipes(allUserIds));
   await Recipe.create(recipes(allUserIds));
 };
 
