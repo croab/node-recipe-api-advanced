@@ -15,7 +15,13 @@ const ingredientSchema = new mongoose.Schema(
     quantityUnit: {
       type: String,
       required: [true, 'An quantity must have a unit.']
-    }
+    },
+    contributingChefs: [
+      {
+        type: mongoose.Schema.ObjectId,
+        reference: 'User'
+      }
+    ]
   }
 );
 
@@ -74,7 +80,13 @@ const recipeSchema = new mongoose.Schema(
         ],
         message: 'Price should be either $, $$, or $$$.'
       }
-    }
+    },
+    contributingChefs: [
+      {
+        type: mongoose.Schema.ObjectId,
+        reference: 'User'
+      }
+    ]
   }
   // SHOULD CHECK IF ADDITIONAL FIELDS NEED TO BE HPP WHITELISTED
 );
@@ -82,6 +94,14 @@ const recipeSchema = new mongoose.Schema(
 // PRE-SAVE CALLBACKS
 recipeSchema.pre('save', function(next) {
   this.slug = slugify(this.name, { lower: true });
+  next();
+});
+
+recipeSchema.pre(/^find/, function(next) {
+  this.populate({
+    path: 'contributingChefs',
+    select: '-__v -passwordChangedOn'
+  });
   next();
 });
 

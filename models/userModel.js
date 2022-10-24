@@ -65,7 +65,7 @@ userSchema.pre('save', async function(next) {
 });
 
 userSchema.pre('save', async function(next) {
-  console.log('MADE IT HERE==============');
+  console.log('MADE IT INTO SAVE==============');
   if (!this.isModified('password') || this.isNew) return next();
   this.passwordChangedOn = Date.now();
   next();

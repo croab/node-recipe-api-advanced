@@ -18,6 +18,5 @@ router
     authController.restrictTo('admin', 'head-chef'),
     recipeController.deleteRecipe
   );
-    // , )
 
 module.exports = router;
