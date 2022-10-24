@@ -39,14 +39,31 @@ const cookbookSchema = new mongoose.Schema(
         type: mongoose.Schema.ObjectId,
         reference: 'User'
       }
+    ],
+    recipes: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Recipe'
+      }
     ]
   }
 );
 
+// MIDDLEWARE
+// POPULATE CONTRIBUTING CHEFS
 cookbookSchema.pre(/^find/, function(next) {
   this.populate({
     path: 'contributingChefs',
     select: '-__v -passwordChangedOn'
+  });
+  next();
+});
+
+// POPULATE RECIPES
+cookbookSchema.pre(/^find/, function(next) {
+  this.populate({
+    path: 'recipes',
+    select: '-__v'
   });
   next();
 });
