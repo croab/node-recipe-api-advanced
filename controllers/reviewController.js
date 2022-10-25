@@ -3,18 +3,7 @@ const catchAsync = require('./../utils/catchAsync');
 const factory = require('./handlerFactory');
 
 // GET ALL REVIEWS
-exports.getAllReviews = catchAsync(async (req, res, next) => {
-  let filter = {};
-  if (req.params.recipeId) filter = { recipe: req.params.recipeId };
-  const reviews = await Review.find(filter);
-  res.status(200).json({
-    status: 'success',
-    results: reviews.length,
-    data: {
-      reviews: reviews
-    }
-  });
-});
+exports.getAllReviews = factory.getAll(Review);
 
 // SET RECIPE AND USER IDs
 exports.setRecipeAndUserIds = (req, res, next) => {
@@ -22,6 +11,9 @@ exports.setRecipeAndUserIds = (req, res, next) => {
   if (!req.body.user) req.body.user = req.user.id;
   next();
 };
+
+// GET REVIEW
+exports.getReview = factory.getOne(Review);
 
 // CREATE REVIEW
 exports.createReview = factory.createOne(Review);
