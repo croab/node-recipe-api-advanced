@@ -9,7 +9,7 @@ exports.getRestaurantsWithin = async (req, res, next) => {
   if (!lat || !lng) {
     next(new CustomError('Please supply lat and lng in the required format /lat,lng/',400 ));
   }
-  // console.log(lat, lng, distance, unit);
+  console.log(lat, lng, distance, unit);
   // radius must be in radians
   const radius = unit === 'mi' ? distance / 3963.2 : distance / 6378.1;
   const restaurants = await Restaurant.find({
@@ -21,6 +21,7 @@ exports.getRestaurantsWithin = async (req, res, next) => {
   });
   res.status(200).json({
     status: 'success',
+    results: restaurants.length,
     data: {
       data: restaurants
     }

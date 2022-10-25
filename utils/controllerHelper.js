@@ -1,9 +1,9 @@
 class ControllerHelper {
   // Passing in a query (which is in effect a model), and a query string
-  constructor(model, queryString) {
-    this.model = model;
+  constructor(query, queryString) {
+    // this.model = model;
     this.queryString = queryString;
-    this.query = null;
+    this.query = query;
   }
 
   filter() {
@@ -16,7 +16,7 @@ class ControllerHelper {
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
 
     // Appling filter
-    this.query = this.model.find(JSON.parse(queryStr));
+    this.query = this.query.find(JSON.parse(queryStr));
     return this;
   }
 

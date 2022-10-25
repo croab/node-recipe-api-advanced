@@ -1,5 +1,4 @@
 const users = (restaurantIds) => {
-  console.log('In user data');
   return ([
     {
       name: 'ADMIN',

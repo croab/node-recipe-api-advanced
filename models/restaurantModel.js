@@ -20,7 +20,7 @@ const restaurantSchema = new mongoose.Schema(
   }
 );
 // INDEXES
-// restaurantSchema.index({ location:  });
+restaurantSchema.index({ location: '2dsphere' });
 
 // CREATE RESTAURANT MODEL
 const Restaurant = mongoose.model('Restaurant', restaurantSchema);
