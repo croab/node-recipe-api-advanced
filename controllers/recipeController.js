@@ -1,5 +1,6 @@
 const Recipe = require('./../models/recipeModel');
 const factory = require('./handlerFactory');
+const catchAsync = require('./../utils/catchAsync');
 
 // TOP RECIPES
 exports.aliasTopRecipes = (req, res, next) => {
