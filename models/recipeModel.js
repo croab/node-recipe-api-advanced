@@ -28,6 +28,10 @@ const recipeSchema = new mongoose.Schema(
       required: [true, 'A recipe title is required.'],
       trim: true
     },
+    description: {
+      type: String,
+      trim: true
+    },
     slug: String,
     ingredients: [ingredientSchema],
     cuisine: {
@@ -81,6 +85,17 @@ const recipeSchema = new mongoose.Schema(
         message: 'Price should be either $, $$, or $$$.'
       }
     },
+    ratingsAverage: {
+      type: Number,
+      default: 4.5,
+      min: [0, 'Rating must be above 0.0'],
+      max: [5, 'Rating must be below 5.0'],
+      set: val => Math.round(val * 10) / 10
+    },
+    ratingsQuantity: {
+      type: Number,
+      default: 0
+    },
     contributingChefs: [
       {
         type: mongoose.Schema.ObjectId,
@@ -94,6 +109,13 @@ const recipeSchema = new mongoose.Schema(
   }
   // SHOULD CHECK IF ADDITIONAL FIELDS NEED TO BE HPP WHITELISTED
 );
+
+// INDEXES
+recipeSchema.index({
+  ratingsAverage: -1,
+  serves: -1
+});
+recipeSchema.index({ slug: 1 });
 
 // VIRTUALS
 recipeSchema.virtual('reviews', {

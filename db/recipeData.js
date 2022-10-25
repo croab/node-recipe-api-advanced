@@ -26,6 +26,9 @@ const recipes = (userIds) => {
       dietary: 'vegetarian',
       difficulty: 'hard',
       price: '$',
+      description: 'So much chocolate in one cake!',
+      ratingsAverage: 4.6,
+      ratingsQuantity: 10,
       contributingChefs: userIds[0]
     },
     {
@@ -54,6 +57,9 @@ const recipes = (userIds) => {
       dietary: 'vegan',
       difficulty: 'easy',
       price: '$$',
+      description: 'A really nice dessert',
+      ratingsAverage: 4.0,
+      ratingsQuantity: 3,
       contributingChefs: userIds[1]
     },
     {
@@ -82,6 +88,9 @@ const recipes = (userIds) => {
       dietary: 'vegetarian',
       difficulty: 'medium',
       price: '$$$',
+      description: 'A really good cake which serves many people.',
+      ratingsAverage: 4.8,
+      ratingsQuantity: 5,
       contributingChefs: userIds[2]
     },
     {
@@ -100,6 +109,9 @@ const recipes = (userIds) => {
       dietary: '',
       difficulty: 'easy',
       price: '$',
+      description: 'Simple but great.',
+      ratingsAverage: 4.1,
+      ratingsQuantity: 6,
       contributingChefs: userIds[3]
     }
   ]);

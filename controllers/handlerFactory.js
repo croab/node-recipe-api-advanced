@@ -15,6 +15,7 @@ exports.getAll = Model =>
                             .paginate();
     // The query construct will be returned by each method and be available in .query
     const docs = await queryConstruct.query;
+    // Can add .explain() if needed
     res.status(200).json({
       status: 'success',
       results: docs.length,

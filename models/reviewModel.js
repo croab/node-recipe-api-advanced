@@ -32,6 +32,12 @@ const reviewSchema = new mongoose.Schema(
     toObject: { virtuals: true }
   }
 );
+
+// STATIC METHODS
+reviewSchema.statics.calcAverageRatings = function(recipeId) {
+
+};
+
 // MIDDLEWARE
 // reviewSchema.pre(/^find/, function(next) {
 //   this.populate({
