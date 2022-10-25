@@ -12,6 +12,10 @@ router
   .get(recipeController.aliasTopRecipes, recipeController.getAllRecipes);
 
 router
+  .route('/recipe-stats')
+  .get(recipeController.getRecipeStats);
+
+router
   .route('/')
   .get(recipeController.getAllRecipes)
   .post(
