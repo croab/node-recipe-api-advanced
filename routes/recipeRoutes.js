@@ -8,14 +8,30 @@ const router = express.Router();
 router.use('/:recipeId/reviews', reviewRouter);
 
 router
+  .route('/top-5-recipes')
+  .get(recipeController.aliasTopRecipes, recipeController.getAllRecipes);
+
+router
+  .route('/recipe-stats')
+  .get(recipeController.getRecipeStats);
+
+router
   .route('/')
-  .get(authController.protect, recipeController.getAllRecipes)
-  .post(recipeController.createRecipe);
+  .get(recipeController.getAllRecipes)
+  .post(
+    authController.protect,
+    authController.restrictTo('admin', 'chef', 'head-chef'),
+    recipeController.createRecipe
+  );
 
 router
   .route('/:id')
   .get(recipeController.getRecipe)
-  .patch(recipeController.updateRecipe)
+  .patch(
+    authController.protect,
+    authController.restrictTo('admin', 'chef', 'head-chef'),
+    recipeController.updateRecipe
+  )
   .delete(
     authController.protect,
     authController.restrictTo('admin', 'head-chef'),

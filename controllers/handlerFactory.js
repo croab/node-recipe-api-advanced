@@ -15,6 +15,7 @@ exports.getAll = Model =>
                             .paginate();
     // The query construct will be returned by each method and be available in .query
     const docs = await queryConstruct.query;
+    // Can add .explain() if needed
     res.status(200).json({
       status: 'success',
       results: docs.length,
@@ -29,7 +30,7 @@ exports.getOne = (Model, popOptions) =>
     let query = Model.findById(req.params.id);
     if (popOptions) query = query.populate('reviews');
     const doc = await query;
-    console.log(doc);
+    console.log('In get one');
     if (!doc) {
       return next(new CustomError('No document found with that id', 404));
     }

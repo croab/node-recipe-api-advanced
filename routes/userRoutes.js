@@ -4,7 +4,7 @@ const authController = require('./../controllers/authController');
 
 const router = express.Router();
 
-// CUSTOM ROUTES FOR AUTHORIZATION
+// AUTHORIZATION-RELATED
 router.post('/signup', authController.signup);
 router.post('/login', authController.login);
 
@@ -16,31 +16,33 @@ router.patch(
   '/reset-password/:token',
   authController.resetPassword
 );
+
+// MOSTLY USER-RELATED
+// PROTECT ALL ROUTES BELOW THIS MIDDLEWARE
+router.use(authController.protect);
+
 router.patch(
   '/update-my-password',
-  authController.protect,
   authController.updatePassword
 );
 
-// CUSTOM ROUTES FOR USERS
 router.patch(
   '/update-me',
-  authController.protect,
   userController.updateMe
 );
 router.delete(
   '/delete-me',
-  authController.protect,
   userController.deleteMe
 );
 router.get(
   '/profile',
-  authController.protect,
   userController.getMe,
   userController.getUser
 );
 
-// OTHER ROUTES
+// OTHER ROUTES FOR ADMIN
+// Use middleware to restrict all below to admin
+router.use(authController.restrictTo('admin'));
 router
   .route('/')
   .get(userController.getAllUsers)

@@ -6,13 +6,21 @@ const router = express.Router();
 
 router
   .route('/')
-  .get(authController.protect, cookbookController.getAllCookbooks)
-  .post(cookbookController.createCookbook);
+  .get(cookbookController.getAllCookbooks)
+  .post(
+    authController.protect,
+    authController.restrictTo('head-chef', 'admin'),
+    cookbookController.createCookbook
+  );
 
 router
   .route('/:id')
   .get(cookbookController.getCookbook)
-  .patch(cookbookController.updateCookbook)
+  .patch(
+    authController.protect,
+    authController.restrictTo('head-chef', 'admin'),
+    cookbookController.updateCookbook
+  )
   .delete(
     authController.protect,
     authController.restrictTo('admin', 'head-chef'),

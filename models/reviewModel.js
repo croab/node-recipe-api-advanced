@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Recipe = require('./recipeModel')
 
 const reviewSchema = new mongoose.Schema(
   {
@@ -32,7 +33,38 @@ const reviewSchema = new mongoose.Schema(
     toObject: { virtuals: true }
   }
 );
+
+// STATIC METHODS
+reviewSchema.statics.calcAverageRatings = async function(recipeId) {
+  // Returns promise
+  const stats = await this.aggregate([
+    {
+      $match: { recipe: recipeId }
+    },
+    {
+      $group: {
+        _id: '$recipe',
+        numberOfRatings: { $sum: 1 },
+        averageRating: { $avg: '$rating' }
+      }
+    }
+  ]);
+  console.log(stats);
+  await Recipe.findByIdAndUpdate(
+    recipeId,
+    {
+      ratingsQuantity: stats[0].numberOfRatings,
+      ratingsAverage: stats[0].averageRating,
+
+    }
+  );
+};
+
 // MIDDLEWARE
+// Why does pre infinitely loop? (Although I understand why it would not be a correct response)
+reviewSchema.post('save', function(next) {
+  this.constructor.calcAverageRatings(this.recipe);
+});
 // reviewSchema.pre(/^find/, function(next) {
 //   this.populate({
 //     path: 'user',
