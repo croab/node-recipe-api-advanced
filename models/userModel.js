@@ -41,6 +41,10 @@ const userSchema = new mongoose.Schema({
       message: 'Passwords should be the same.'
     }
   },
+  restaurant: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Restaurant'
+  },
   passwordChangedOn: Date,
   passwordResetToken: String,
   passwordResetExpires: Date,

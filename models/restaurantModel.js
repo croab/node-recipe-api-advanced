@@ -19,8 +19,10 @@ const restaurantSchema = new mongoose.Schema(
     }
   }
 );
+// INDEXES
+// restaurantSchema.index({ location:  });
 
 // CREATE RESTAURANT MODEL
-const Recipe = mongoose.model('Restaurant', restaurantSchema);
+const Restaurant = mongoose.model('Restaurant', restaurantSchema);
 
 module.exports = Restaurant;
