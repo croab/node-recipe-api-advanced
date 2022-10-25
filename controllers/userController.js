@@ -53,6 +53,12 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
   })
 });
 
+// GET ME
+exports.getMe = (req, res, next) => {
+  req.params.id = req.user.id;
+  next();
+};
+
 // ===== FOR ADMIN =====
 // GET ALL USERS
 exports.getAllUsers = factory.getAll(User);
