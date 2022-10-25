@@ -53,30 +53,20 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
   })
 });
 
-// FOR ADMIN =====
-// GET ALL USERS
-exports.getAllUsers = catchAsync(async (req, res, next) => {
-  const users = await User.find();
-
-  // Send response
-  res.status(200).json({
-    status: 'success',
-    results: users.length,
-    data: {
-      users: users
-    }
-  });
-});
-
-// GET ONE USER
-exports.getUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!'
-  });
+// GET ME
+exports.getMe = (req, res, next) => {
+  req.params.id = req.user.id;
+  next();
 };
 
-// CREATE USER (INCOMPLETE)
+// ===== FOR ADMIN =====
+// GET ALL USERS
+exports.getAllUsers = factory.getAll(User);
+
+// GET ONE USER
+exports.getUser = factory.getOne(User);
+
+// CREATE USER (CAN BE DELETED)
 exports.createUser = (req, res) => {
   res.status(500).json({
     status: 'error',
@@ -84,13 +74,8 @@ exports.createUser = (req, res) => {
   });
 };
 
-// UPDATE USER (INCOMPLETE)
-exports.updateUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!'
-  });
-};
+// UPDATE USER
+exports.updateUser = factory.updateOne(User);
 
-// DELETE USER (INCOMPLETE)
+// DELETE USER
 exports.deleteUser = factory.deleteOne(User);
