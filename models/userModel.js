@@ -41,6 +41,10 @@ const userSchema = new mongoose.Schema({
       message: 'Passwords should be the same.'
     }
   },
+  restaurant: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Restaurant'
+  },
   passwordChangedOn: Date,
   passwordResetToken: String,
   passwordResetExpires: Date,
@@ -65,7 +69,6 @@ userSchema.pre('save', async function(next) {
 });
 
 userSchema.pre('save', async function(next) {
-  console.log('MADE IT INTO SAVE==============');
   if (!this.isModified('password') || this.isNew) return next();
   this.passwordChangedOn = Date.now();
   next();

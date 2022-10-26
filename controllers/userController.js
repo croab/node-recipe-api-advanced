@@ -24,7 +24,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     return next(new CustomError('This is the wrong location for updating your password. Please do so at /update-my-password', 400));
   }
   // Filter out unwanted fields!
-  const filteredBody = filterObj(req.body, 'name', 'email');
+  const filteredBody = filterObj(req.body, 'name', 'email', 'restaurant');
   const updatedUser = await User.findByIdAndUpdate(
     req.user.id,
     filteredBody,

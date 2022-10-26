@@ -8,10 +8,12 @@ const User = require('./../models/userModel');
 const Recipe = require('./../models/recipeModel');
 const Cookbook = require('./../models/cookbookModel');
 const Review = require('./../models/reviewModel');
+const Restaurant = require('./../models/restaurantModel');
 const users = require('./userData');
 const recipes = require('./recipeData');
 const cookbooks = require('./cookbookData');
 const reviews = require('./reviewData');
+const restaurants = require('./restaurantData');
 
 seedDB = async () => {
   const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD);
@@ -24,9 +26,15 @@ seedDB = async () => {
   await Recipe.deleteMany();
   await User.deleteMany();
   await Review.deleteMany();
+  await Restaurant.deleteMany();
+
+  // CREATE RESTAURANTS
+  await Restaurant.create(restaurants());
+  const allRestaurants = await Restaurant.find();
+  const allRestaurantIds = allRestaurants.map(rest => rest.id);
 
   // CREATE USERS
-  await User.create(users);
+  await User.create(users(allRestaurantIds));
   const allUsers = await User.find();
   const allUserIds = allUsers.map(user => user.id);
 

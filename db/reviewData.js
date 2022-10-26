@@ -16,7 +16,7 @@ const reviews = (userIds, recipeIds) => {
       review: 'Not bad',
       rating: 2,
       user: userIds[1],
-      recipe: recipeIds[1]
+      recipe: recipeIds[2]
     },
     {
       review: 'Perfect!',

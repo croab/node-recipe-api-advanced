@@ -8,7 +8,7 @@ exports.getAll = Model =>
     let filter = {};
     if (req.params.recipeId) filter = { recipe: req.params.recipeId };
     // Below then applies to all
-    const queryConstruct = new ControllerHelper(Model.find(filter), req.query)
+    const queryConstruct = new ControllerHelper(Model, req.query, filter)
                             .filter()
                             .sort()
                             .limitFields()
