@@ -1,13 +1,18 @@
 class ControllerHelper {
   // Passing in a query (which is in effect a model), and a query string
-  constructor(query, queryString) {
-    // this.model = model;
+  constructor(Model, queryString, optFilter) {
+    // The query string
     this.queryString = queryString;
-    this.query = query;
+    // The model in question
+    this.Model = Model;
+    // Any optional filter if present
+    this.optFilter = optFilter || false;
+    // Initialize
+    this.query = null;
   }
 
   filter() {
-    const queryObj = { ...this.queryString };
+    let queryObj = { ...this.queryString };
     const excludedFields = ['sort', 'fields', 'page', 'limit'];
     excludedFields.forEach((field) => {
       delete queryObj[field];
@@ -16,7 +21,9 @@ class ControllerHelper {
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
 
     // Appling filter
-    this.query = this.query.find(JSON.parse(queryStr));
+    queryObj = JSON.parse(queryStr);
+    if (this.optFilter) queryObj = Object.assign(queryObj, this.optFilter)
+    this.query = this.Model.find(queryObj);
     return this;
   }
 
@@ -25,7 +32,8 @@ class ControllerHelper {
       const sortFormatted = this.queryString.sort.split(',').join(' ');
       this.query = this.query.sort(sortFormatted);
     } else {
-      this.query = this.query.sort('title');
+      // Need to sort this at some point based on which fields are available on the calling model
+      this.query = this.query.sort('_id');
     }
     return this;
   }
@@ -34,8 +42,12 @@ class ControllerHelper {
     if (this.queryString.limit) {
       const limitFormatted = this.queryString.limit.split(',').join(' ');
       this.query = this.query.select(limitFormatted);
+    } else if (this.query.schema.obj.title) {
+      this.query = this.query.select('title');
+    } else if (this.query.schema.obj.name) {
+      this.query = this.query.select('name');
     } else {
-      this.query = this.query.select('-__v');
+      this.query = this.query.select('createdAt');
     }
     return this;
   }
