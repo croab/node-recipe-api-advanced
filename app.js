@@ -16,7 +16,7 @@ const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
 const restaurantRouter = require('./routes/restaurantRoutes');
 
-// Instantiate app
+// Instantiate app here
 const app = express();
 
 // GLOBAL MIDDLEWARE =========================================
