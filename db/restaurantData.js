@@ -5,7 +5,7 @@ const restaurants = () => {
       location: {
         description: "Fancy Restaurant in South America",
         type: "Point",
-        coordinates: [-51.18246, -70.63713],
+        coordinates: [-70.63713, -51.18246],
         address: "Argentina"
       }
     },
@@ -14,7 +14,7 @@ const restaurants = () => {
       location: {
         description: "Fancy Restaurant in the UK",
         type: "Point",
-        coordinates: [0.4424679652187016, 51.850398375243216],
+        coordinates: [51.850398375243216, 0.4424679652187016],
         address: "UK"
       }
     },
@@ -23,7 +23,7 @@ const restaurants = () => {
       location: {
         description: "Fancy Restaurant in Belgium",
         type: "Point",
-        coordinates: [4.319496119703087, 50.83869702381516],
+        coordinates: [50.83869702381516, 4.319496119703087],
         address: "Belgium"
       }
     }

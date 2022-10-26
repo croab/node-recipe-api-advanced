@@ -9,6 +9,11 @@ router
   .get(restaurantController.getRestaurantsWithin);
 
 router
+  .route('/distances/:latlng/unit/:unit')
+  .get(restaurantController.getDistances);
+
+
+router
   .route('/')
   .get(restaurantController.getAllRestaurants)
   .post(
